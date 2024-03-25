@@ -1,1 +1,2 @@
-pkg/pages/*.go
+*_templ.go
+*_templ.txt
