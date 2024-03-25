@@ -1,0 +1,57 @@
+package pages
+
+templ Home(calendarHeader string, dates [][]string) {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<title>Timeshare Calendar</title>
+			<script src="https://cdn.tailwindcss.com"></script>
+		</head>
+		<body class="flex flex-col items-center gap-4 pt-6">
+			<h1 class="text-emerald-400 text-4xl font-bold font-size-8">Timeshare Calendar</h1>
+			<h2 class="text-emerald-400 text-3xl font-bold font-size-8">{ calendarHeader }</h2>
+			<table class="border-spacing-4 border-separate">
+				<thead class>
+					<tr>
+						@weekdayHeader() {
+							Su
+						}
+						@weekdayHeader() {
+							Mo
+						}
+						@weekdayHeader() {
+							Tu
+						}
+						@weekdayHeader() {
+							We
+						}
+						@weekdayHeader() {
+							Th
+						}
+						@weekdayHeader() {
+							Fr
+						}
+						@weekdayHeader() {
+							Sa
+						}
+					</tr>
+				</thead>
+				<tbody>
+					for _, week := range dates {
+						<tr>
+							for _, day := range week {
+								<td>{ day }</td>
+							}
+						</tr>
+					}
+				</tbody>
+			</table>
+		</body>
+	</html>
+}
+
+templ weekdayHeader() {
+	<th class="transition ease-in-out duration-300 hover:bg-emerald-400 font-sans text-3xl text-slate-700 bg-clip-border rounded-full w-14 h-14">
+		{ children... }
+	</th>
+}
