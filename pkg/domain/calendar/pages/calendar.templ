@@ -21,51 +21,53 @@ func previousMonthYear(month int, year int) string {
 
 templ Calendar(month int, year int, dates [][]string) {
 	<h1 class="text-emerald-400 text-4xl font-bold font-size-8">Timeshare Calendar</h1>
-	<div class="flex gap-8">
-		<button class="text-emerald-400 text-3xl font-bold font-size-8" aria-label="previous month" hx-get={ fmt.Sprintf("/calendar?monthYear=%s", previousMonthYear(month, year)) } hx-target="body" hx-swap="innerHTML">←</button>
-		<h2 class="text-emerald-400 text-3xl font-bold font-size-8">{ fmt.Sprintf("%s %d", time.Month(month), year) }</h2>
-		<button class="text-emerald-400 text-3xl font-bold font-size-8" aria-label="next month" hx-get={ fmt.Sprintf("/calendar?monthYear=%s", nextMonthYear(month, year)) } hx-target="body" hx-swap="innerHTML">→</button>
-	</div>
-	<table class="border-spacing-4 border-separate">
-		<thead class>
-			<tr>
-				@weekdayHeader() {
-					Su
-				}
-				@weekdayHeader() {
-					Mo
-				}
-				@weekdayHeader() {
-					Tu
-				}
-				@weekdayHeader() {
-					We
-				}
-				@weekdayHeader() {
-					Th
-				}
-				@weekdayHeader() {
-					Fr
-				}
-				@weekdayHeader() {
-					Sa
-				}
-			</tr>
-		</thead>
-		<tbody>
-			for _, week := range dates {
-				<tr class="text-center">
-					for _, day := range week {
-						if day != "" {
-							@dayComponent(day)
-						} else {
-							<td></td>
-						}
+	<div class="flex flex-col">
+		<div class="flex gap-8">
+			<button class="text-emerald-400 text-3xl font-bold font-size-8" aria-label="previous month" hx-get={ fmt.Sprintf("/calendar?monthYear=%s", previousMonthYear(month, year)) } hx-target="body" hx-swap="innerHTML">←</button>
+			<h2 class="text-emerald-400 text-3xl font-bold font-size-8 grow text-center">{ fmt.Sprintf("%s %d", time.Month(month), year) }</h2>
+			<button class="text-emerald-400 text-3xl font-bold font-size-8" aria-label="next month" hx-get={ fmt.Sprintf("/calendar?monthYear=%s", nextMonthYear(month, year)) } hx-target="body" hx-swap="innerHTML">→</button>
+		</div>
+		<table class="border-spacing-4 border-separate">
+			<thead class>
+				<tr>
+					@weekdayHeader() {
+						Su
+					}
+					@weekdayHeader() {
+						Mo
+					}
+					@weekdayHeader() {
+						Tu
+					}
+					@weekdayHeader() {
+						We
+					}
+					@weekdayHeader() {
+						Th
+					}
+					@weekdayHeader() {
+						Fr
+					}
+					@weekdayHeader() {
+						Sa
 					}
 				</tr>
-			}
-		</tbody>
-	</table>
+			</thead>
+			<tbody>
+				for _, week := range dates {
+					<tr class="text-center">
+						for _, day := range week {
+							if day != "" {
+								@dayCell(day)
+							} else {
+								<td></td>
+							}
+						}
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
 }
 
 templ weekdayHeader() {
@@ -74,6 +76,6 @@ templ weekdayHeader() {
 	</th>
 }
 
-templ dayComponent(day string) {
+templ dayCell(day string) {
 	<td class="transition ease-in-out duration-300 hover:bg-emerald-400 font-sans text-3xl text-slate-700 bg-clip-border rounded-full w-14 h-14">{ day }</td>
 }
