@@ -52,5 +52,5 @@ func (c Controller) getCalendar(w http.ResponseWriter, req *http.Request) {
 		fmt.Println(err.Error())
 	}
 
-	pages.Calendar(calendar.Header, calendar.String()).Render(ctx, w)
+	pages.Calendar(month, year, calendar.String()).Render(ctx, w)
 }

@@ -1,8 +1,31 @@
 package pages
 
-templ Calendar(calendarHeader string, dates [][]string) {
+import (
+	"fmt"
+	"time"
+)
+
+func nextMonthYear(month int, year int) string {
+	if month == 12 {
+		return fmt.Sprintf("1-%d", year+1)
+	}
+	return fmt.Sprintf("%d-%d", month+1, year)
+}
+
+func previousMonthYear(month int, year int) string {
+	if month == 1 {
+		return fmt.Sprintf("12-%d", year-1)
+	}
+	return fmt.Sprintf("%d-%d", month-1, year)
+}
+
+templ Calendar(month int, year int, dates [][]string) {
 	<h1 class="text-emerald-400 text-4xl font-bold font-size-8">Timeshare Calendar</h1>
-	<h2 class="text-emerald-400 text-3xl font-bold font-size-8">{ calendarHeader }</h2>
+	<div class="flex gap-8">
+		<button class="text-emerald-400 text-3xl font-bold font-size-8" aria-label="previous month" hx-get={ fmt.Sprintf("/calendar?monthYear=%s", previousMonthYear(month, year)) } hx-target="body" hx-swap="innerHTML">←</button>
+		<h2 class="text-emerald-400 text-3xl font-bold font-size-8">{ fmt.Sprintf("%s %d", time.Month(month), year) }</h2>
+		<button class="text-emerald-400 text-3xl font-bold font-size-8" aria-label="next month" hx-get={ fmt.Sprintf("/calendar?monthYear=%s", nextMonthYear(month, year)) } hx-target="body" hx-swap="innerHTML">→</button>
+	</div>
 	<table class="border-spacing-4 border-separate">
 		<thead class>
 			<tr>
