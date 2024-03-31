@@ -1,0 +1,56 @@
+package pages
+
+templ Calendar(calendarHeader string, dates [][]string) {
+	<h1 class="text-emerald-400 text-4xl font-bold font-size-8">Timeshare Calendar</h1>
+	<h2 class="text-emerald-400 text-3xl font-bold font-size-8">{ calendarHeader }</h2>
+	<table class="border-spacing-4 border-separate">
+		<thead class>
+			<tr>
+				@weekdayHeader() {
+					Su
+				}
+				@weekdayHeader() {
+					Mo
+				}
+				@weekdayHeader() {
+					Tu
+				}
+				@weekdayHeader() {
+					We
+				}
+				@weekdayHeader() {
+					Th
+				}
+				@weekdayHeader() {
+					Fr
+				}
+				@weekdayHeader() {
+					Sa
+				}
+			</tr>
+		</thead>
+		<tbody>
+			for _, week := range dates {
+				<tr class="text-center">
+					for _, day := range week {
+						if day != "" {
+							@dayComponent(day)
+						} else {
+							<td></td>
+						}
+					}
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+
+templ weekdayHeader() {
+	<th class="font-sans text-3xl text-slate-700">
+		{ children... }
+	</th>
+}
+
+templ dayComponent(day string) {
+	<td class="transition ease-in-out duration-300 hover:bg-emerald-400 font-sans text-3xl text-slate-700 bg-clip-border rounded-full w-14 h-14">{ day }</td>
+}
