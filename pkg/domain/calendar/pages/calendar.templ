@@ -26,9 +26,8 @@ func previousMonthYear(month int, year int) string {
 // TODO: Figure out how we want to build the URL in a unified way
 templ Calendar(month int, year int, dates [][]string, selectedDay string) {
 	<div id="calendar-page" class="text-center">
-		<h1 class="text-emerald-800 text-4xl font-bold font-size-8">Timeshare Calendar</h1>
-		<div class="flex flex-col max-w-md">
-			<div class="flex gap-8">
+		<div class="flex flex-col max-w-md m-auto">
+			<div class="flex gap-8">	
 				<button
 					class="text-emerald-800 text-3xl font-bold font-size-8"
 					aria-label="previous month"
@@ -36,7 +35,7 @@ templ Calendar(month int, year int, dates [][]string, selectedDay string) {
 					hx-target="#calendar-page"
 					hx-swap="outerHTML"
 				>←</button>
-				<h2 class="text-emerald-800 text-3xl font-bold font-size-8 grow text-center">{ fmt.Sprintf("%s %d", time.Month(month), year) }</h2>
+				<h1 class="text-emerald-800 text-3xl font-bold font-size-8 grow text-center">{ fmt.Sprintf("%s %d", time.Month(month), year) }</h1>
 				<button
 					class="text-emerald-800 text-3xl font-bold font-size-8"
 					aria-label="next month"
