@@ -4,18 +4,18 @@ templ Home() {
 	<!DOCTYPE html>
 	<html lang="en">
 		<head>
-			<title>Timeshare Calendar</title>
 			<script src="https://cdn.tailwindcss.com"></script>
-			<script src="https://unpkg.com/htmx.org@1.9.11" integrity="sha384-0gxUXCCR8yv9FM2b+U3FDbsKthCI66oH5IA9fHppQq9DDMHuMauqq1ZHBpJxQ0J0" crossorigin="anonymous"></script>
+			<script src="https://unpkg.com/htmx.org@2.0.2" integrity="sha384-Y7hw+L/jvKeWIRRkqWYfPcvVxHzVzn5REgzbawhxAuQGwX1XWe70vji+VSeHOThJ" crossorigin="anonymous"></script>
 			<meta charset="UTF-8"/>
 		</head>
-		<body class="flex flex-col items-center gap-4 pt-6" id="body">
+		<body>
+			<title>Timeshare Calendar</title>
+			<main></main>
 			<script> 
 				document.addEventListener('DOMContentLoaded', function() {
 					const now = new Date
 					const monthYear = `${now.getMonth() + 1}-${now.getFullYear()}`
-		
- 					htmx.ajax('GET', `/calendar?monthYear=${monthYear}`, {'hx-target': 'body', 'hx-swap': 'innerHTML'});
+ 					htmx.ajax('GET', `/calendar?monthYear=${monthYear}`, 'main');
 				});
 			</script>
 		</body>

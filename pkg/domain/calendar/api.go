@@ -12,10 +12,12 @@ import (
 
 type CalendarController interface {
 	getCalendar(w http.ResponseWriter, req *http.Request)
+	getBookingForm(w http.ResponseWriter, req *http.Request)
 }
 
 func InitRoutes(mux *http.ServeMux, controller CalendarController) {
 	mux.HandleFunc("GET /calendar", controller.getCalendar)
+	mux.HandleFunc("GET /bookingForm", controller.getBookingForm)
 }
 
 type CalendarService interface {
@@ -52,5 +54,11 @@ func (c Controller) getCalendar(w http.ResponseWriter, req *http.Request) {
 		fmt.Println(err.Error())
 	}
 
-	pages.Calendar(month, year, calendar.String()).Render(ctx, w)
+	selectedDay := req.URL.Query().Get("selectedDay")
+
+	pages.Calendar(month, year, calendar.String(), selectedDay).Render(ctx, w)
+}
+
+func (c Controller) getBookingForm(w http.ResponseWriter, req *http.Request) {
+
 }

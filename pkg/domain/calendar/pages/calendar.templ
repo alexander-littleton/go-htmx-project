@@ -5,6 +5,10 @@ import (
 	"time"
 )
 
+func buildCalendarUrl(month int, year int) string {
+	return fmt.Sprintf("/calendar?monthYear=%d-%d", month, year)
+}
+
 func nextMonthYear(month int, year int) string {
 	if month == 12 {
 		return fmt.Sprintf("1-%d", year+1)
@@ -19,54 +23,69 @@ func previousMonthYear(month int, year int) string {
 	return fmt.Sprintf("%d-%d", month-1, year)
 }
 
-templ Calendar(month int, year int, dates [][]string) {
-	<h1 class="text-emerald-400 text-4xl font-bold font-size-8">Timeshare Calendar</h1>
-	<div class="flex flex-col">
-		<div class="flex gap-8">
-			<button class="text-emerald-400 text-3xl font-bold font-size-8" aria-label="previous month" hx-get={ fmt.Sprintf("/calendar?monthYear=%s", previousMonthYear(month, year)) } hx-target="body" hx-swap="innerHTML">←</button>
-			<h2 class="text-emerald-400 text-3xl font-bold font-size-8 grow text-center">{ fmt.Sprintf("%s %d", time.Month(month), year) }</h2>
-			<button class="text-emerald-400 text-3xl font-bold font-size-8" aria-label="next month" hx-get={ fmt.Sprintf("/calendar?monthYear=%s", nextMonthYear(month, year)) } hx-target="body" hx-swap="innerHTML">→</button>
-		</div>
-		<table class="border-spacing-4 border-separate">
-			<thead class>
-				<tr>
-					@weekdayHeader() {
-						Su
-					}
-					@weekdayHeader() {
-						Mo
-					}
-					@weekdayHeader() {
-						Tu
-					}
-					@weekdayHeader() {
-						We
-					}
-					@weekdayHeader() {
-						Th
-					}
-					@weekdayHeader() {
-						Fr
-					}
-					@weekdayHeader() {
-						Sa
-					}
-				</tr>
-			</thead>
-			<tbody>
-				for _, week := range dates {
-					<tr class="text-center">
-						for _, day := range week {
-							if day != "" {
-								@dayCell(day)
-							} else {
-								<td></td>
-							}
+// TODO: Figure out how we want to build the URL in a unified way
+templ Calendar(month int, year int, dates [][]string, selectedDay string) {
+	<div id="calendar-page" class="text-center">
+		<h1 class="text-emerald-800 text-4xl font-bold font-size-8">Timeshare Calendar</h1>
+		<div class="flex flex-col max-w-md">
+			<div class="flex gap-8">
+				<button
+					class="text-emerald-800 text-3xl font-bold font-size-8"
+					aria-label="previous month"
+					hx-get={ fmt.Sprintf("/calendar?monthYear=%s", previousMonthYear(month, year)) }
+					hx-target="#calendar-page"
+					hx-swap="outerHTML"
+				>←</button>
+				<h2 class="text-emerald-800 text-3xl font-bold font-size-8 grow text-center">{ fmt.Sprintf("%s %d", time.Month(month), year) }</h2>
+				<button
+					class="text-emerald-800 text-3xl font-bold font-size-8"
+					aria-label="next month"
+					hx-get={ fmt.Sprintf("/calendar?monthYear=%s", nextMonthYear(month, year)) }
+					hx-target="#calendar-page"
+					hx-swap="outerHTML"
+				>→</button>
+			</div>
+			<table class="border-spacing-4 border-separate">
+				<thead class>
+					<tr>
+						@weekdayHeader() {
+							Su
+						}
+						@weekdayHeader() {
+							Mo
+						}
+						@weekdayHeader() {
+							Tu
+						}
+						@weekdayHeader() {
+							We
+						}
+						@weekdayHeader() {
+							Th
+						}
+						@weekdayHeader() {
+							Fr
+						}
+						@weekdayHeader() {
+							Sa
 						}
 					</tr>
-				}
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					for _, week := range dates {
+						<tr class="text-center">
+							for _, day := range week {
+								if day != "" {
+									@dayCell(day, month, year, selectedDay == day)
+								} else {
+									<td></td>
+								}
+							}
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
 	</div>
 }
 
@@ -76,6 +95,20 @@ templ weekdayHeader() {
 	</th>
 }
 
-templ dayCell(day string) {
-	<td class="transition ease-in-out duration-300 hover:bg-emerald-400 font-sans text-3xl text-slate-700 bg-clip-border rounded-full w-14 h-14">{ day }</td>
+func getDayCellClass(isSelected bool) string {
+	baseClass := "transition ease-in-out duration-300 hover:bg-emerald-400 font-sans text-3xl text-slate-700 bg-clip-border rounded-full w-14 h-14"
+	if isSelected {
+		return fmt.Sprintf("%s bg-emerald-200", baseClass)
+	}
+	return baseClass
+}
+
+templ dayCell(day string, month int, year int, isSelected bool) {
+	<td
+		class={ getDayCellClass(isSelected) }
+		hx-get={ buildCalendarUrl(month, year) }
+		hx-target="#calendar-page"
+		hx-swap="outerHTML"
+		hx-trigger="click"
+	><button>{ day }</button></td>
 }
